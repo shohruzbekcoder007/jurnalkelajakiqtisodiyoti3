@@ -21,6 +21,7 @@ const rubrics = [
 const articles = [
   {
     slug: 'paxta-klasterlarida-resurslardan-foydalanish',
+    featuredOrder: 1,
     rubric: 'moliya-va-sanoat',
     date: '2026-08-24',
     title:
@@ -30,6 +31,7 @@ const articles = [
   },
   {
     slug: 'korxonalarda-ichki-auditni-tashkil-etish',
+    featuredOrder: 2,
     rubric: 'audit-va-nazorat',
     date: '2026-08-21',
     title: 'Korxonalarda ichki auditni tashkil etish va takomillashtirish',
@@ -37,6 +39,7 @@ const articles = [
   },
   {
     slug: 'yoshlar-biznes-loyihalarini-moliyalashtirish',
+    featuredOrder: 3,
     rubric: 'bank-ishi',
     date: '2026-08-18',
     title: 'Yoshlar biznes-loyihalarini moliyalashtirishda kredit va investitsiya resurslarining o‘rni',

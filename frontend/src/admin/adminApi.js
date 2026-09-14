@@ -63,8 +63,13 @@ export const adminApi = {
     request('/auth/password', { method: 'PUT', body: { currentPassword, newPassword } }),
 
   stats: () => request('/admin/stats'),
+  featured: {
+    get: () => request('/admin/featured'),
+    save: (articles) => request('/admin/featured', { method: 'PUT', body: { articles } }),
+  },
   articles: {
     ...crud('articles'),
+    options: () => request('/admin/articles/options'),
     uploadPdf: (id, file) => {
       const form = new FormData();
       form.append('pdf', file);

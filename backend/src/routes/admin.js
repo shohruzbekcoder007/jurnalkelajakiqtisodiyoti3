@@ -96,6 +96,59 @@ router.get(
   })
 );
 
+// Tanlash ro'yxatlari uchun barcha maqolalarning qisqa ma'lumoti
+router.get(
+  '/articles/options',
+  asyncHandler(async (req, res) => {
+    const items = await Article.find()
+      .select('title publishedAt featuredOrder rubric')
+      .sort({ publishedAt: -1 })
+      .populate('rubric', 'name')
+      .lean();
+    res.json(items);
+  })
+);
+
+/* ---------------- Tanlangan maqolalar ---------------- */
+// GET /api/admin/featured — [1-o'rin, 2-o'rin, 3-o'rin] (bo'sh o'rin — null)
+router.get(
+  '/featured',
+  asyncHandler(async (req, res) => {
+    const items = await Article.find({ featuredOrder: { $gte: 1 } })
+      .select('title slug publishedAt featuredOrder rubric')
+      .populate('rubric', 'name')
+      .lean();
+    res.json([1, 2, 3].map((n) => items.find((a) => a.featuredOrder === n) || null));
+  })
+);
+
+// PUT /api/admin/featured  { articles: [id | null, id | null, id | null] }
+router.put(
+  '/featured',
+  asyncHandler(async (req, res) => {
+    const ids = Array.isArray(req.body?.articles) ? req.body.articles.slice(0, 3) : null;
+    if (!ids) return res.status(400).json({ message: 'articles massivi yuborilmagan' });
+
+    const chosen = ids.map((id) => (id ? String(id) : null));
+    const filled = chosen.filter(Boolean);
+    if (filled.some((id) => !mongoose.isValidObjectId(id))) {
+      return res.status(400).json({ message: 'Noto‘g‘ri maqola identifikatori' });
+    }
+    if (new Set(filled).size !== filled.length) {
+      return res.status(400).json({ message: 'Bitta maqolani ikki o‘ringa qo‘yib bo‘lmaydi' });
+    }
+    if ((await Article.countDocuments({ _id: { $in: filled } })) !== filled.length) {
+      return res.status(400).json({ message: 'Tanlangan maqolalardan biri topilmadi' });
+    }
+
+    await Article.updateMany({ featuredOrder: { $ne: null } }, { $set: { featuredOrder: null } });
+    await Promise.all(
+      chosen.map((id, i) => (id ? Article.updateOne({ _id: id }, { $set: { featuredOrder: i + 1 } }) : null))
+    );
+    res.json({ message: 'Tanlangan maqolalar saqlandi' });
+  })
+);
+
 router.get(
   '/articles/:id',
   validId,

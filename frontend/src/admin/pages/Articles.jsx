@@ -89,6 +89,11 @@ export default function Articles() {
                 <tr key={a._id}>
                   <td className="adm-table__title">
                     <Link to={`/admin/maqolalar/${a._id}`}>{a.title}</Link>
+                    {a.featuredOrder && (
+                      <Link to="/admin/tanlangan" className="adm-badge adm-badge--featured" title="Bosh sahifada tanlangan">
+                        ★ {a.featuredOrder}-o‘rin
+                      </Link>
+                    )}
                   </td>
                   <td>{a.rubric?.name || '—'}</td>
                   <td className="adm-nowrap">{a.issue?.title || '—'}</td>

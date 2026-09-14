@@ -469,6 +469,141 @@
   color: #5f6b6f;
 }
 
+.adm-badge--featured {
+  margin-left: 8px;
+  background: #fbeee9;
+  color: #9c4435;
+  font-family: var(--font-sans);
+  vertical-align: 2px;
+}
+
+/* ---------- Tanlangan maqolalar ---------- */
+.adm-intro {
+  max-width: 760px;
+  margin: -6px 0 20px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.adm-slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.adm-slot-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.adm-slot {
+  flex: 1;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 3px solid var(--teal);
+}
+
+.adm-slot--main {
+  border-top-color: var(--red);
+}
+
+.adm-slot__head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.adm-slot__num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--navy-800);
+}
+
+.adm-slot__preview {
+  min-height: 118px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--teal-soft);
+}
+
+.adm-slot--main .adm-slot__preview {
+  background: var(--navy-800);
+}
+
+.adm-slot__preview--empty {
+  align-items: center;
+  justify-content: center;
+  background: #eef1f0 !important;
+  border: 1px dashed var(--line);
+  font-size: 13px;
+  color: var(--muted-2);
+}
+
+.adm-slot__meta {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.adm-slot--main .adm-slot__meta {
+  color: #9fbcc6;
+}
+
+.adm-slot__title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--navy-800);
+}
+
+.adm-slot--main .adm-slot__title {
+  color: #fff;
+}
+
+.adm-slot .input {
+  height: 38px;
+  font-size: 13px;
+}
+
+.adm-slot > .adm-link {
+  align-self: flex-start;
+}
+
+.adm-slot__move {
+  display: flex;
+  justify-content: space-between;
+  min-height: 18px;
+  padding: 0 4px;
+}
+
+.adm-slot__move .adm-link:only-child:last-child {
+  margin-left: auto;
+}
+
+.adm-unsaved {
+  margin-top: 14px;
+  color: var(--red);
+}
+
+@media (max-width: 1100px) {
+  .adm-slots {
+    grid-template-columns: 1fr;
+  }
+}
+
 .adm-status {
   width: auto;
   height: 32px !important;

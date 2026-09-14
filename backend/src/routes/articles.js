@@ -50,6 +50,21 @@ router.get(
   })
 );
 
+// GET /api/articles/featured — admin tanlagan maqolalar (o'rin tartibida)
+router.get(
+  '/featured',
+  asyncHandler(async (req, res) => {
+    const items = await Article.find({ featuredOrder: { $gte: 1 } })
+      .select('-body')
+      .sort({ featuredOrder: 1 })
+      .limit(3)
+      .populate('rubric', 'name slug')
+      .populate('issue', 'year number')
+      .lean();
+    res.json(items.map(withIssueTitle));
+  })
+);
+
 // GET /api/articles/:slug
 router.get(
   '/:slug',

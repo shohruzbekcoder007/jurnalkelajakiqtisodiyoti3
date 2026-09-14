@@ -5,6 +5,7 @@ import { useAuth } from './AuthContext.jsx';
 const links = [
   { to: '/admin', label: 'Boshqaruv paneli', end: true },
   { to: '/admin/maqolalar', label: 'Maqolalar' },
+  { to: '/admin/tanlangan', label: 'Tanlangan maqolalar' },
   { to: '/admin/ruknlar', label: 'Ruknlar' },
   { to: '/admin/sonlar', label: 'Jurnal sonlari' },
   { to: '/admin/sahifalar', label: 'Sahifalar' },

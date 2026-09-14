@@ -572,6 +572,18 @@ textarea {
   margin-top: 16px;
 }
 
+.featured--single {
+  grid-template-columns: 1fr;
+}
+
+.featured--single .featured__main {
+  min-height: 320px;
+}
+
+.section--latest.section--first {
+  margin-top: 0;
+}
+
 .featured__side {
   display: flex;
   flex-direction: column;

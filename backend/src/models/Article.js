@@ -11,6 +11,8 @@ const articleSchema = new mongoose.Schema(
     rubric: { type: mongoose.Schema.Types.ObjectId, ref: 'Rubric', required: true },
     issue: { type: mongoose.Schema.Types.ObjectId, ref: 'Issue', required: true },
     publishedAt: { type: Date, required: true },
+    // Bosh sahifadagi "Tanlangan maqolalar": 1 — katta karta, 2 va 3 — yon kartalar
+    featuredOrder: { type: Number, min: 1, max: 3, default: null },
     pdf: {
       filename: String,
       originalName: String,
@@ -21,5 +23,6 @@ const articleSchema = new mongoose.Schema(
 );
 
 articleSchema.index({ publishedAt: -1 });
+articleSchema.index({ featuredOrder: 1 });
 
 export default mongoose.model('Article', articleSchema);

@@ -9,10 +9,12 @@ import { ArrowRight, BookOpen, ChevronRight } from '../components/Icons.jsx';
 export default function Home() {
   const issue = useFetch(() => api.currentIssue());
   const latest = useFetch(() => api.articles({ limit: 6 }));
+  const featured = useFetch(() => api.featured());
   const rubrics = useFetch(() => api.rubrics());
 
   const articles = latest.data?.items || [];
-  const [main, ...rest] = articles.slice(0, 3);
+  // Admin paneldan belgilangan maqolalar: 1-o'rin — katta karta, 2 va 3 — yon kartalar
+  const [main, ...rest] = featured.data || [];
 
   return (
     <div className="container">
@@ -48,14 +50,14 @@ export default function Home() {
 
       <div className="home-grid">
         <div>
+          {main && (
           <section className="section">
             <div className="section-head">
               <h2 className="section-head__title">Tanlangan maqolalar</h2>
               <span className="section-head__note">Tadqiqotlar va tahlillar</span>
             </div>
 
-            {main && (
-              <div className="featured">
+              <div className={`featured${rest.length ? '' : ' featured--single'}`}>
                 <Link to={`/maqola/${main.slug}`} className="featured__main">
                   <ArticleMeta article={main} />
                   <h3 className="article-title featured__main-title">{main.title}</h3>
@@ -64,7 +66,7 @@ export default function Home() {
                     Maqolani o‘qish <ArrowRight size={13} />
                   </span>
                 </Link>
-                <div className="featured__side">
+                {rest.length > 0 && <div className="featured__side">
                   {rest.map((a) => (
                     <Link key={a._id} to={`/maqola/${a.slug}`} className="featured__card">
                       <ArticleMeta article={a} />
@@ -74,12 +76,12 @@ export default function Home() {
                       </span>
                     </Link>
                   ))}
-                </div>
+                </div>}
               </div>
-            )}
           </section>
+          )}
 
-          <section className="section section--latest">
+          <section className={`section section--latest${main ? '' : ' section--first'}`}>
             <div className="section-head">
               <h2 className="section-head__title">So‘nggi maqolalar</h2>
               <Link to="/arxiv" className="section-head__link">

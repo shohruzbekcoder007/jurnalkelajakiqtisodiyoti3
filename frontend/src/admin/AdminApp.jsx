@@ -5,6 +5,7 @@ import Login from './pages/Login.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Articles from './pages/Articles.jsx';
 import ArticleForm from './pages/ArticleForm.jsx';
+import Featured from './pages/Featured.jsx';
 import Rubrics from './pages/Rubrics.jsx';
 import Issues from './pages/Issues.jsx';
 import Pages from './pages/Pages.jsx';
@@ -37,6 +38,7 @@ export default function AdminApp() {
           <Route path="maqolalar" element={<Articles />} />
           <Route path="maqolalar/yangi" element={<ArticleForm />} />
           <Route path="maqolalar/:id" element={<ArticleForm />} />
+          <Route path="tanlangan" element={<Featured />} />
           <Route path="ruknlar" element={<Rubrics />} />
           <Route path="sonlar" element={<Issues />} />
           <Route path="sahifalar" element={<Pages />} />

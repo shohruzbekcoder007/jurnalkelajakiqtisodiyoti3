@@ -20,6 +20,7 @@ export const api = {
     const qs = new URLSearchParams(Object.entries(params).filter(([, v]) => v !== '' && v != null));
     return request(`/articles?${qs}`);
   },
+  featured: () => request('/articles/featured'),
   article: (slug) => request(`/articles/${encodeURIComponent(slug)}`),
   rubrics: () => request('/rubrics'),
   currentIssue: () => request('/issues/current'),
