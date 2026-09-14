@@ -13,9 +13,9 @@ export default function Header() {
     <header className="header">
       <div className="container header__inner">
         <Link to="/" className="brand">
-          <span className="brand__mark">FT</span>
+          <span className="brand__mark">KI</span>
           <span className="brand__text">
-            <span className="brand__name">Moliyaviy texnologiyalar</span>
+            <span className="brand__name">Kelajak iqtisodiyoti va raqamli transformatsiyalar</span>
             <span className="brand__sub">Ilmiy elektron jurnali</span>
           </span>
         </Link>

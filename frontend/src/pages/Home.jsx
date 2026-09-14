@@ -21,8 +21,8 @@ export default function Home() {
       <section className="hero">
         <div className="hero__text">
           <div className="eyebrow">Ilmiy elektron jurnal · 2024</div>
-          <h1 className="display hero__title">“Moliyaviy texnologiyalar” ilmiy elektron jurnali</h1>
-          <p className="hero__sub">Toshkent davlat iqtisodiyot universiteti</p>
+          <h1 className="display hero__title">“Kelajak iqtisodiyoti va raqamli transformatsiyalar” ilmiy elektron jurnali</h1>
+          <p className="hero__sub">Ziyo nashir media</p>
           <div className="hero__actions">
             <Link to="/arxiv" className="btn btn--primary">
               Arxivni ko‘rish <ArrowRight />
@@ -34,7 +34,7 @@ export default function Home() {
         </div>
 
         <div className="issue-card">
-          <span className="issue-card__mark" aria-hidden>FT</span>
+          <span className="issue-card__mark" aria-hidden>KI</span>
           <div className="issue-card__top">
             <span>So‘nggi son</span>
             <span>№ {issue.data?.title || '—'}</span>
@@ -96,7 +96,7 @@ export default function Home() {
                       <ArticleMeta article={a} />
                       <h3 className="article-title latest__title">{a.title}</h3>
                     </div>
-                    <span className="latest__thumb">FT</span>
+                    <span className="latest__thumb">KI</span>
                   </Link>
                 </li>
               ))}

@@ -124,7 +124,7 @@ const pages = [
     showUpdated: true,
     updatedAt: new Date('2026-08-24T10:00:00Z'),
     body: [
-      '“Moliyaviy texnologiyalar” ilmiy elektron jurnali Toshkent davlat iqtisodiyot universiteti tomonidan nashr etiladigan ilmiy elektron nashrdir. Jurnal moliya, bank ishi, audit, buxgalteriya hisobi va iqtisodiyotning zamonaviy yo‘nalishlariga bag‘ishlangan ilmiy maqolalarni e’lon qiladi. Jurnalning maqsadi — ilmiy izlanishlar natijalarini ommalashtirish, yosh olimlar va tadqiqotchilar uchun professional ilmiy muloqot maydonini yaratish.',
+      '“Kelajak iqtisodiyoti va raqamli transformatsiyalar” ilmiy elektron jurnali Ziyo nashir media tomonidan nashr etiladigan ilmiy elektron nashrdir. Jurnal moliya, bank ishi, audit, buxgalteriya hisobi va iqtisodiyotning zamonaviy yo‘nalishlariga bag‘ishlangan ilmiy maqolalarni e’lon qiladi. Jurnalning maqsadi — ilmiy izlanishlar natijalarini ommalashtirish, yosh olimlar va tadqiqotchilar uchun professional ilmiy muloqot maydonini yaratish.',
     ],
   },
   {
@@ -140,7 +140,7 @@ const pages = [
     slug: 'jurnal-manzili',
     eyebrow: 'Tahririyat bilan aloqa',
     title: 'Jurnal manzili',
-    body: ['Toshkent davlat iqtisodiyot universiteti.'],
+    body: ['Ziyo nashir media.'],
   },
   {
     slug: 'chop-etish-tartibi',

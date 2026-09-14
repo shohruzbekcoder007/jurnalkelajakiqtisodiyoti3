@@ -1,6 +1,6 @@
-# Moliyaviy texnologiyalar — MERN
+# Kelajak iqtisodiyoti va raqamli transformatsiyalar — MERN
 
-"Moliyaviy texnologiyalar" ilmiy elektron jurnali (MongoDB + Express + React + Node.js).
+"Kelajak iqtisodiyoti va raqamli transformatsiyalar" ilmiy elektron jurnali (MongoDB + Express + React + Node.js).
 
 ```
 backend/    Express + Mongoose REST API (port 5000)

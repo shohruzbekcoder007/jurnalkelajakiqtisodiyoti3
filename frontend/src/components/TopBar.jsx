@@ -1,7 +1,7 @@
 export default function TopBar() {
   return (
     <div className="topbar">
-      <span>Toshkent davlat iqtisodiyot universiteti</span>
+      <span>Ziyo nashir media</span>
       <span className="topbar__right">Ilmiy elektron jurnal · UZ</span>
     </div>
   );

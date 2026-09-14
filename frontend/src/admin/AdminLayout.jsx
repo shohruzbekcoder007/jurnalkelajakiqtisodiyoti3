@@ -26,9 +26,9 @@ export default function AdminLayout() {
     <div className="adm">
       <aside className={`adm-side${open ? ' is-open' : ''}`}>
         <Link to="/admin" className="adm-brand">
-          <span className="brand__mark adm-brand__mark">FT</span>
+          <span className="brand__mark adm-brand__mark">KI</span>
           <span>
-            <span className="adm-brand__name">Moliyaviy texnologiyalar</span>
+            <span className="adm-brand__name">Kelajak iqtisodiyoti va raqamli transformatsiyalar</span>
             <span className="adm-brand__sub">Admin panel</span>
           </span>
         </Link>

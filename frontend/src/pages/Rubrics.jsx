@@ -11,7 +11,7 @@ export default function Rubrics() {
   return (
     <div className="container">
       <PageHeader eyebrow="Maqolalar tuzilmasi" title="Jurnal ruknlari">
-        Moliyaviy texnologiyalar bo‘yicha tadqiqotlarning asosiy yo‘nalishlari.
+        Kelajak iqtisodiyoti va raqamli transformatsiyalar bo‘yicha tadqiqotlarning asosiy yo‘nalishlari.
       </PageHeader>
 
       {loading ? (

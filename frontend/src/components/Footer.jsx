@@ -6,10 +6,10 @@ export default function Footer() {
       <div className="container">
         <div className="footer__grid">
           <div>
-            <div className="footer__brand">Moliyaviy texnologiyalar</div>
+            <div className="footer__brand">Kelajak iqtisodiyoti va raqamli transformatsiyalar</div>
             <p className="footer__desc">
-              Toshkent davlat iqtisodiyot universitetining ilmiy elektron jurnali. Moliyaviy texnologiyalar,
-              iqtisodiyot va raqamli taraqqiyot masalalari.
+              Ziyo nashir media tomonidan nashr etiladigan ilmiy elektron jurnal. Kelajak iqtisodiyoti, raqamli transformatsiyalar
+              va zamonaviy moliya masalalari.
             </p>
           </div>
           <div>
@@ -30,7 +30,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="footer__bottom">
-          <span>© 2026 TDIU · Barcha huquqlar himoyalangan</span>
+          <span>© 2026 Ziyo nashir media · Barcha huquqlar himoyalangan</span>
           <span>ISSN · Ilmiy nashr</span>
         </div>
       </div>

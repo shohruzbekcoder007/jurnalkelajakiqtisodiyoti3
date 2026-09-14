@@ -31,9 +31,9 @@ export default function Login() {
     <div className="adm-login">
       <form className="adm-login__card" onSubmit={onSubmit}>
         <div className="brand">
-          <span className="brand__mark">FT</span>
+          <span className="brand__mark">KI</span>
           <span className="brand__text">
-            <span className="brand__name">Moliyaviy texnologiyalar</span>
+            <span className="brand__name">Kelajak iqtisodiyoti va raqamli transformatsiyalar</span>
             <span className="brand__sub">Admin panel</span>
           </span>
         </div>
