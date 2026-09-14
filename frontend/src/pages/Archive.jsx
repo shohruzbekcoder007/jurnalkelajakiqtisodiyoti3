@@ -16,7 +16,9 @@ export default function Archive() {
   const rukn = params.get('rukn') || '';
   const [query, setQuery] = useState(q);
 
-  useEffect(() => setQuery(q), [q]);
+  useEffect(() => {
+    setQuery(q);
+  }, [q]);
 
   const rubrics = useFetch(() => api.rubrics());
   const list = useFetch(() => api.articles({ page, limit: 7, q, rubric: rukn }), [page, q, rukn]);

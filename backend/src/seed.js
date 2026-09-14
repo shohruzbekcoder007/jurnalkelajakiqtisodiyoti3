@@ -6,6 +6,7 @@ import Rubric from './models/Rubric.js';
 import Issue from './models/Issue.js';
 import Article from './models/Article.js';
 import Page from './models/Page.js';
+import { ensureAdmin } from './createAdmin.js';
 
 const rubrics = [
   { slug: 'audit-va-nazorat', name: 'Audit va nazorat' },
@@ -180,6 +181,15 @@ async function seed() {
   }
 
   console.log(`Seed tayyor: ${rubricDocs.length} rukn, ${articles.length} maqola, ${pages.length} sahifa`);
+
+  // Admin mavjud bo'lmasa .env dagi ma'lumotlar bilan yaratiladi (mavjud admin o'zgartirilmaydi)
+  if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
+    const { admin, created } = await ensureAdmin({
+      email: process.env.ADMIN_EMAIL,
+      password: process.env.ADMIN_PASSWORD,
+    });
+    console.log(created ? `Admin yaratildi: ${admin.email}` : `Admin mavjud: ${admin.email}`);
+  }
   await mongoose.disconnect();
 }
 

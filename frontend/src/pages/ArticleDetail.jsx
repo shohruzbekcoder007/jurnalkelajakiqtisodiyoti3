@@ -3,7 +3,7 @@ import { api } from '../api.js';
 import { useFetch } from '../utils/useFetch.js';
 import ArticleMeta from '../components/ArticleMeta.jsx';
 import { Loading, ErrorMessage } from '../components/Status.jsx';
-import { ArrowLeft } from '../components/Icons.jsx';
+import { ArrowLeft, ArrowRight } from '../components/Icons.jsx';
 
 export default function ArticleDetail() {
   const { slug } = useParams();
@@ -28,6 +28,16 @@ export default function ArticleDetail() {
               <p key={i}>{p}</p>
             ))}
           </div>
+          {data.pdf?.filename && (
+            <a
+              href={`${import.meta.env.VITE_API_URL || ''}/uploads/${data.pdf.filename}`}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn--primary article__pdf"
+            >
+              To‘liq maqola (PDF) <ArrowRight />
+            </a>
+          )}
           <Link to="/arxiv" className="link-arrow article__back">
             <ArrowLeft size={13} /> Arxivga qaytish
           </Link>
