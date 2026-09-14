@@ -24,6 +24,8 @@ export const api = {
   article: (slug) => request(`/articles/${encodeURIComponent(slug)}`),
   rubrics: () => request('/rubrics'),
   currentIssue: () => request('/issues/current'),
+  issues: () => request('/issues'),
+  issue: (year, number) => request(`/issues/${encodeURIComponent(year)}/${encodeURIComponent(number)}`),
   page: (slug) => request(`/pages/${encodeURIComponent(slug)}`),
   submit: (body) => request('/submissions', { method: 'POST', body: JSON.stringify(body) }),
 };

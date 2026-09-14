@@ -51,7 +51,8 @@ Paneldagi bo'limlar:
 
 - **Maqolalar** — qo'shish, tahrirlash, o'chirish, PDF yuklash (20 MB gacha), qidiruv va rukn bo'yicha filtr
 - **Ruknlar** — qo'shish, nomi/tartibini o'zgartirish (maqolasi bor ruknni o'chirib bo'lmaydi)
-- **Jurnal sonlari** — yangi son qo'shish, joriy sonni belgilash (bosh sahifadagi "So'nggi son")
+- **Tanlangan maqolalar** — bosh sahifadagi 3 ta kartaga maqola tanlash
+- **Jurnal sonlari** — yangi son ochish, sonni yopish/qayta ochish (yopiq songa maqola biriktirib bo'lmaydi), "So'nggi son"ni belgilash, sonning to'liq PDF nashri: tayyor PDF yuklash yoki **maqolalardan kitob yig'ish** (muqova + mundarija + barcha maqolalar; PDF'i yo'q maqola matnidan sahifa yaratiladi)
 - **Sahifalar** — "Jurnal haqida", "Tahririyat kengashi" va boshqa matnli sahifalar; yangi sahifa `/sahifa/:slug` da ochiladi
 - **Arizalar** — "Maqola yuborish" orqali kelgan arizalar, holatini o'zgartirish
 - **Sozlamalar** — parolni o'zgartirish
@@ -78,6 +79,8 @@ Production uchun `JWT_SECRET` ni uzun tasodifiy qiymatga almashtiring. Yuklangan
 |---|---|
 | `/` | Bosh sahifa |
 | `/arxiv` | Maqolalar arxivi (`?q=`, `?rukn=`, `?sahifa=`) |
+| `/sonlar` | Jurnal sonlari arxivi |
+| `/sonlar/:yil/:son` | Son sahifasi: mundarija va to'liq PDF nashr |
 | `/ruknlar` | Jurnal ruknlari |
 | `/jurnal-haqida` | Jurnal haqida |
 | `/tahrir-kengashi` | Tahririyat kengashi |

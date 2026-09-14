@@ -8,6 +8,7 @@ import ArticleForm from './pages/ArticleForm.jsx';
 import Featured from './pages/Featured.jsx';
 import Rubrics from './pages/Rubrics.jsx';
 import Issues from './pages/Issues.jsx';
+import IssueForm from './pages/IssueForm.jsx';
 import Pages from './pages/Pages.jsx';
 import PageForm from './pages/PageForm.jsx';
 import Submissions from './pages/Submissions.jsx';
@@ -41,6 +42,7 @@ export default function AdminApp() {
           <Route path="tanlangan" element={<Featured />} />
           <Route path="ruknlar" element={<Rubrics />} />
           <Route path="sonlar" element={<Issues />} />
+          <Route path="sonlar/:id" element={<IssueForm />} />
           <Route path="sahifalar" element={<Pages />} />
           <Route path="sahifalar/yangi" element={<PageForm />} />
           <Route path="sahifalar/:id" element={<PageForm />} />

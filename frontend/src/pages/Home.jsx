@@ -4,7 +4,8 @@ import { useFetch } from '../utils/useFetch.js';
 import ArticleMeta from '../components/ArticleMeta.jsx';
 import SideLabel from '../components/SideLabel.jsx';
 import InfoBox from '../components/InfoBox.jsx';
-import { ArrowRight, BookOpen, ChevronRight } from '../components/Icons.jsx';
+import IssueCard from '../components/IssueCard.jsx';
+import { ArrowRight, ChevronRight } from '../components/Icons.jsx';
 
 export default function Home() {
   const issue = useFetch(() => api.currentIssue());
@@ -33,19 +34,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="issue-card">
-          <span className="issue-card__mark" aria-hidden>KI</span>
-          <div className="issue-card__top">
-            <span>So‘nggi son</span>
-            <span>№ {issue.data?.title || '—'}</span>
-          </div>
-          <div className="issue-card__title">{issue.data?.title || '—'}</div>
-          <div className="issue-card__foot">
-            <span className="issue-card__line" />
-            <BookOpen size={14} />
-            <span>{issue.data?.articleCount ?? 0} ta ilmiy maqola</span>
-          </div>
-        </div>
+        {/* Bosilganda shu sonning maqolalar ro'yxati ochiladi */}
+        <IssueCard issue={issue.data} label="So‘nggi son" />
       </section>
 
       <div className="home-grid">

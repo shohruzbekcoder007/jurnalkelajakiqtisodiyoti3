@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { adminApi, uploadUrl } from '../adminApi.js';
 import { PageTitle, Field, Alert, useLoader, toInputDate } from '../ui.jsx';
 
@@ -32,6 +32,7 @@ export default function ArticleForm() {
   const isNew = !id;
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const fileRef = useRef(null);
 
   const rubrics = useLoader(() => adminApi.rubrics.list());
@@ -67,8 +68,10 @@ export default function ArticleForm() {
   // Yangi maqola uchun joriy sonni avtomatik tanlash
   useEffect(() => {
     if (isNew && !form.issue && issues.data?.length) {
-      const current = issues.data.find((i) => i.isCurrent) || issues.data[0];
-      setForm((f) => ({ ...f, issue: current._id }));
+      const open = issues.data.filter((i) => i.isOpen);
+      const fromUrl = open.find((i) => i._id === searchParams.get('issue'));
+      const current = fromUrl || open.find((i) => i.isCurrent) || open[0];
+      if (current) setForm((f) => ({ ...f, issue: current._id }));
     }
   }, [isNew, issues.data, form.issue]);
 
@@ -189,13 +192,20 @@ export default function ArticleForm() {
               <select className="input" value={form.issue} onChange={set('issue')} required>
                 <option value="">— Tanlang —</option>
                 {(issues.data || []).map((i) => (
-                  <option key={i._id} value={i._id}>
+                  // Yopiq songa biriktirib bo'lmaydi (maqola allaqachon shu sonda bo'lsa — tanlangan holda qoladi)
+                  <option key={i._id} value={i._id} disabled={!i.isOpen && i._id !== article?.issue}>
                     {i.title}
-                    {i.isCurrent ? ' (joriy)' : ''}
+                    {i.isCurrent ? ' · so‘nggi son' : ''}
+                    {i.isOpen ? '' : ' · yopiq'}
                   </option>
                 ))}
               </select>
             </Field>
+            {issues.data && !issues.data.some((i) => i.isOpen) && (
+              <p className="adm-field__hint adm-hint--warn">
+                Ochiq son yo‘q. Avval <Link to="/admin/sonlar">“Jurnal sonlari”</Link> bo‘limida son oching.
+              </p>
+            )}
             <Field label="Nashr sanasi" required error={errors.publishedAt}>
               <input className="input" type="date" value={form.publishedAt} onChange={set('publishedAt')} required />
             </Field>

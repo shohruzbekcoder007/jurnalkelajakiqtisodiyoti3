@@ -784,6 +784,68 @@
   pointer-events: none;
 }
 
+.adm-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.adm-check--block {
+  display: flex;
+  margin: 2px 0 16px;
+  line-height: 1.4;
+}
+
+.adm-hint--warn {
+  margin: -6px 0 14px;
+  color: #9c4435;
+}
+
+.adm-hint--warn a {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.adm-status-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 24px;
+  border-left: 4px solid var(--teal);
+}
+
+.adm-status-card.is-closed {
+  border-left-color: #8a969a;
+  background: #f4f5f4;
+}
+
+.adm-status-card .adm-card__title {
+  margin-bottom: 4px;
+}
+
+.adm-status-card p {
+  max-width: 520px;
+  font-size: 13px;
+}
+
+.adm-divider {
+  margin: 16px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+  color: var(--muted-2);
+}
+
+.adm-divider::before,
+.adm-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
 .adm-pager {
   margin-top: 0;
   align-items: center;

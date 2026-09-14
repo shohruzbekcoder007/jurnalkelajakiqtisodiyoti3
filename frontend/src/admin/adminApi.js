@@ -78,7 +78,16 @@ export const adminApi = {
     removePdf: (id) => request(`/admin/articles/${id}/pdf`, { method: 'DELETE' }),
   },
   rubrics: crud('rubrics'),
-  issues: crud('issues'),
+  issues: {
+    ...crud('issues'),
+    uploadPdf: (id, file) => {
+      const form = new FormData();
+      form.append('pdf', file);
+      return request(`/admin/issues/${id}/pdf`, { method: 'POST', form });
+    },
+    removePdf: (id) => request(`/admin/issues/${id}/pdf`, { method: 'DELETE' }),
+    generatePdf: (id) => request(`/admin/issues/${id}/pdf/generate`, { method: 'POST' }),
+  },
   pages: crud('pages'),
   submissions: {
     list: (params) => request(`/admin/submissions?${qs(params)}`),

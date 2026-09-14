@@ -8,7 +8,11 @@ import Submission from '../models/Submission.js';
 import { requireAdmin } from '../middleware/auth.js';
 import { asyncHandler, issueTitle } from '../utils/asyncHandler.js';
 import { uniqueSlug } from '../utils/slugify.js';
-import { pdfUpload, removeUpload } from '../config/upload.js';
+import { pdfUpload, removeUpload, UPLOAD_DIR } from '../config/upload.js';
+import { buildIssuePdf } from '../utils/buildIssuePdf.js';
+import fs from 'fs/promises';
+import path from 'path';
+import crypto from 'crypto';
 
 const router = Router();
 router.use(requireAdmin);
@@ -159,10 +163,22 @@ router.get(
   })
 );
 
+// Maqolani faqat ochiq songa biriktirish mumkin
+async function checkIssueOpen(issueId) {
+  if (!issueId) return 'Jurnal sonini tanlang';
+  if (!mongoose.isValidObjectId(issueId)) return 'Noto‘g‘ri jurnal soni';
+  const issue = await Issue.findById(issueId).lean();
+  if (!issue) return 'Jurnal soni topilmadi';
+  if (issue.isOpen === false) return `${issueTitle(issue)} yopilgan — unga maqola biriktirib bo‘lmaydi`;
+  return null;
+}
+
 router.post(
   '/articles',
   asyncHandler(async (req, res) => {
     const data = articlePayload(req.body || {});
+    const issueError = await checkIssueOpen(data.issue);
+    if (issueError) return res.status(400).json({ message: issueError, errors: { issue: issueError } });
     data.slug = await uniqueSlug(Article, req.body.slug || data.title);
     const article = await Article.create(data);
     res.status(201).json(article);
@@ -175,7 +191,13 @@ router.put(
   asyncHandler(async (req, res) => {
     const article = await Article.findById(req.params.id);
     if (!article) return notFound(res, 'Maqola');
-    article.set(articlePayload(req.body || {}));
+    const data = articlePayload(req.body || {});
+    // Boshqa songa o'tkazilayotgan bo'lsa, yangi son ochiq bo'lishi kerak
+    if ('issue' in data && String(data.issue || '') !== String(article.issue)) {
+      const issueError = await checkIssueOpen(data.issue);
+      if (issueError) return res.status(400).json({ message: issueError, errors: { issue: issueError } });
+    }
+    article.set(data);
     if (req.body.slug !== undefined && req.body.slug !== article.slug) {
       article.slug = await uniqueSlug(Article, req.body.slug || article.title, article._id);
     }
@@ -280,15 +302,33 @@ router.delete(
 );
 
 /* ---------------- Jurnal sonlari ---------------- */
+async function countsByIssue() {
+  const counts = await Article.aggregate([{ $group: { _id: '$issue', count: { $sum: 1 } } }]);
+  return new Map(counts.map((c) => [String(c._id), c.count]));
+}
+
 router.get(
   '/issues',
   asyncHandler(async (req, res) => {
-    const [issues, counts] = await Promise.all([
-      Issue.find().sort({ year: -1, number: -1 }).lean(),
-      Article.aggregate([{ $group: { _id: '$issue', count: { $sum: 1 } } }]),
-    ]);
-    const byId = new Map(counts.map((c) => [String(c._id), c.count]));
-    res.json(issues.map((i) => ({ ...i, title: issueTitle(i), articleCount: byId.get(String(i._id)) || 0 })));
+    const [issues, counts] = await Promise.all([Issue.find().sort({ year: -1, number: -1 }).lean(), countsByIssue()]);
+    res.json(
+      issues.map((i) => ({ ...i, isOpen: i.isOpen !== false, title: issueTitle(i), articleCount: counts.get(String(i._id)) || 0 }))
+    );
+  })
+);
+
+router.get(
+  '/issues/:id',
+  validId,
+  asyncHandler(async (req, res) => {
+    const issue = await Issue.findById(req.params.id).lean();
+    if (!issue) return notFound(res, 'Son');
+    const articles = await Article.find({ issue: issue._id })
+      .select('title slug publishedAt authors pdf rubric')
+      .sort({ publishedAt: 1, _id: 1 })
+      .populate('rubric', 'name')
+      .lean();
+    res.json({ ...issue, isOpen: issue.isOpen !== false, title: issueTitle(issue), articleCount: articles.length, articles });
   })
 );
 
@@ -296,11 +336,20 @@ async function applyCurrent(issue) {
   if (issue.isCurrent) await Issue.updateMany({ _id: { $ne: issue._id } }, { isCurrent: false });
 }
 
+function issuePayload(body) {
+  const data = {};
+  if (body.year !== undefined) data.year = Number(body.year);
+  if (body.number !== undefined) data.number = Number(body.number);
+  if (body.isCurrent !== undefined) data.isCurrent = !!body.isCurrent;
+  if (body.isOpen !== undefined) data.isOpen = !!body.isOpen;
+  if (body.publishedAt !== undefined) data.publishedAt = body.publishedAt ? new Date(body.publishedAt) : undefined;
+  return data;
+}
+
 router.post(
   '/issues',
   asyncHandler(async (req, res) => {
-    const { year, number, isCurrent } = req.body || {};
-    const issue = await Issue.create({ year: Number(year), number: Number(number), isCurrent: !!isCurrent });
+    const issue = await Issue.create({ isOpen: true, ...issuePayload(req.body || {}) });
     await applyCurrent(issue);
     res.status(201).json(issue);
   })
@@ -312,10 +361,7 @@ router.put(
   asyncHandler(async (req, res) => {
     const issue = await Issue.findById(req.params.id);
     if (!issue) return notFound(res, 'Son');
-    const { year, number, isCurrent } = req.body || {};
-    if (year !== undefined) issue.year = Number(year);
-    if (number !== undefined) issue.number = Number(number);
-    if (isCurrent !== undefined) issue.isCurrent = !!isCurrent;
+    issue.set(issuePayload(req.body || {}));
     await issue.save();
     await applyCurrent(issue);
     res.json(issue);
@@ -330,7 +376,67 @@ router.delete(
     if (count) return res.status(400).json({ message: `Bu sonda ${count} ta maqola bor. Avval ularni boshqa songa o‘tkazing` });
     const issue = await Issue.findByIdAndDelete(req.params.id);
     if (!issue) return notFound(res, 'Son');
+    removeUpload(issue.pdf?.filename);
     res.json({ message: 'Son o‘chirildi' });
+  })
+);
+
+// Sonning to'liq PDF kitobini qo'lda yuklash
+router.post(
+  '/issues/:id/pdf',
+  validId,
+  pdfUpload.single('pdf'),
+  asyncHandler(async (req, res) => {
+    if (!req.file) return res.status(400).json({ message: 'PDF fayl tanlanmagan' });
+    const issue = await Issue.findById(req.params.id);
+    if (!issue) {
+      removeUpload(req.file.filename);
+      return notFound(res, 'Son');
+    }
+    removeUpload(issue.pdf?.filename);
+    issue.pdf = { filename: req.file.filename, originalName: req.file.originalname, size: req.file.size, generated: false };
+    await issue.save();
+    res.json(issue);
+  })
+);
+
+router.delete(
+  '/issues/:id/pdf',
+  validId,
+  asyncHandler(async (req, res) => {
+    const issue = await Issue.findById(req.params.id);
+    if (!issue) return notFound(res, 'Son');
+    removeUpload(issue.pdf?.filename);
+    issue.pdf = undefined;
+    await issue.save();
+    res.json(issue);
+  })
+);
+
+// Sondagi barcha maqolalardan PDF kitob yig'ish
+router.post(
+  '/issues/:id/pdf/generate',
+  validId,
+  asyncHandler(async (req, res) => {
+    const issue = await Issue.findById(req.params.id);
+    if (!issue) return notFound(res, 'Son');
+    const articles = await Article.find({ issue: issue._id }).sort({ publishedAt: 1, _id: 1 }).populate('rubric', 'name').lean();
+    if (!articles.length) return res.status(400).json({ message: 'Bu sonda hali maqola yo‘q' });
+
+    const { bytes, pages, warnings } = await buildIssuePdf(issue, articles);
+    const filename = `${Date.now()}-${crypto.randomBytes(6).toString('hex')}.pdf`;
+    await fs.writeFile(path.join(UPLOAD_DIR, filename), bytes);
+
+    removeUpload(issue.pdf?.filename);
+    issue.pdf = {
+      filename,
+      originalName: `${issue.year}-yil-${issue.number}-son.pdf`,
+      size: bytes.length,
+      generated: true,
+      generatedAt: new Date(),
+    };
+    await issue.save();
+    res.json({ issue, pages, warnings, message: `PDF kitob tayyor: ${articles.length} ta maqola, ${pages} sahifa` });
   })
 );
 

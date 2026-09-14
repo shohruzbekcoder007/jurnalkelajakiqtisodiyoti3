@@ -178,8 +178,9 @@ textarea {
 
 .nav {
   align-self: flex-end;
+  flex: none;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 22px;
   padding-bottom: 9px;
 }
@@ -481,6 +482,25 @@ textarea {
   gap: 8px;
   font-size: 12px;
   color: #cfe0e4;
+}
+
+.issue-card--link {
+  transition: background 0.15s;
+}
+
+.issue-card--link:hover {
+  background: var(--navy-900);
+}
+
+.issue-card__go {
+  margin-left: auto;
+  display: inline-flex;
+  color: #cfe0e4;
+  transition: transform 0.15s;
+}
+
+.issue-card--link:hover .issue-card__go {
+  transform: translateX(4px);
 }
 
 .issue-card__line {
@@ -929,6 +949,109 @@ textarea {
   line-height: 1.3;
 }
 
+.article__links {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px 24px;
+}
+
+/* ---------- Jurnal sonlari ---------- */
+.issues-year + .issues-year {
+  margin-top: 48px;
+}
+
+.issues-year__title {
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--navy-800);
+}
+
+.issues-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.issues-grid .issue-card {
+  min-height: 300px;
+}
+
+.issues-grid__meta {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  font-size: 12px;
+  color: var(--muted-2);
+}
+
+.issues-badge {
+  font-weight: 600;
+  color: var(--teal);
+}
+
+.issues-badge--open {
+  color: var(--red);
+}
+
+.issue-toc {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.issue-toc__item {
+  padding: 22px 0 26px;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.issue-toc__num {
+  padding-top: 1px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--red);
+}
+
+.issue-toc__title {
+  margin-top: 10px;
+  font-size: 20px;
+  line-height: 1.32;
+}
+
+.issue-toc__title a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.issue-toc__authors {
+  margin-top: 6px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.issue-toc .link-arrow {
+  margin-top: 12px;
+}
+
+.issue-nopdf {
+  margin-top: 40px;
+  padding: 22px;
+  background: var(--teal-soft);
+  border-left: 3px solid var(--teal);
+  font-size: 14px;
+  color: var(--muted);
+}
+
 .article__back {
   display: flex;
   width: fit-content;
@@ -1091,6 +1214,37 @@ textarea {
 }
 
 /* ---------- Responsive ---------- */
+/* Uzun jurnal nomi: o'rta ekranlarda ikki qatorga o'tadi, menyu bir qatorda qoladi */
+@media (max-width: 1180px) {
+  .brand__name {
+    max-width: 320px;
+    font-size: 19px;
+  }
+
+  .nav {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 960px) {
+  .header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 16px;
+  }
+
+  .brand__name {
+    max-width: none;
+  }
+
+  .nav {
+    align-self: stretch;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    padding-bottom: 0;
+  }
+}
+
 .hero > *,
 .home-grid > *,
 .archive-grid > *,
@@ -1125,18 +1279,6 @@ textarea {
 @media (max-width: 760px) {
   .topbar__right {
     display: none;
-  }
-
-  .header__inner {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 16px;
-  }
-
-  .nav {
-    align-self: stretch;
-    gap: 16px;
-    padding-bottom: 0;
   }
 
   .hero {

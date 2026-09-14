@@ -8,9 +8,10 @@ const articleSchema = new mongoose.Schema(
     authors: { type: [String], default: [] },
     keywords: { type: [String], default: [] },
     body: { type: [String], default: [] },
-    rubric: { type: mongoose.Schema.Types.ObjectId, ref: 'Rubric', required: true },
-    issue: { type: mongoose.Schema.Types.ObjectId, ref: 'Issue', required: true },
-    publishedAt: { type: Date, required: true },
+    rubric: { type: mongoose.Schema.Types.ObjectId, ref: 'Rubric', required: [true, 'Ruknni tanlang'] },
+    // Har bir maqola albatta biror jurnal soniga tegishli
+    issue: { type: mongoose.Schema.Types.ObjectId, ref: 'Issue', required: [true, 'Jurnal sonini tanlang'] },
+    publishedAt: { type: Date, required: [true, 'Nashr sanasini kiriting'] },
     // Bosh sahifadagi "Tanlangan maqolalar": 1 — katta karta, 2 va 3 — yon kartalar
     featuredOrder: { type: Number, min: 1, max: 3, default: null },
     pdf: {

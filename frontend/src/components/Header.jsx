@@ -2,6 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 const links = [
   { to: '/arxiv', label: 'Arxiv' },
+  { to: '/sonlar', label: 'Jurnal sonlari' },
   { to: '/jurnal-haqida', label: 'Jurnal haqida' },
   { to: '/ruknlar', label: 'Ruknlar' },
   { to: '/tahrir-kengashi', label: 'Tahrir kengashi' },

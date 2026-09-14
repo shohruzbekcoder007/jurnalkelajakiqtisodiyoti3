@@ -9,6 +9,8 @@ import Rubrics from './pages/Rubrics.jsx';
 import StaticPage from './pages/StaticPage.jsx';
 import Submit from './pages/Submit.jsx';
 import ArticleDetail from './pages/ArticleDetail.jsx';
+import Issues from './pages/Issues.jsx';
+import IssueDetail from './pages/IssueDetail.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 // Admin panel alohida bundle sifatida yuklanadi
@@ -52,6 +54,8 @@ export default function App() {
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/arxiv" element={<Archive />} />
+          <Route path="/sonlar" element={<Issues />} />
+          <Route path="/sonlar/:year/:number" element={<IssueDetail />} />
           <Route path="/ruknlar" element={<Rubrics />} />
           <Route path="/maqola/:slug" element={<ArticleDetail />} />
           <Route path="/maqola-yuborish" element={<Submit />} />

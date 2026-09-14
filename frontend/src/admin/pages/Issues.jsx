@@ -9,7 +9,6 @@ export default function Issues() {
   const list = useLoader(() => adminApi.issues.list());
   const [flash, setFlash] = useState({ type: '', text: '' });
   const [newRow, setNewRow] = useState({ year: thisYear, number: '', isCurrent: true });
-  const [editing, setEditing] = useState(null);
 
   const run = async (fn, success) => {
     try {
@@ -25,17 +24,18 @@ export default function Issues() {
 
   const onCreate = async (e) => {
     e.preventDefault();
-    if (await run(() => adminApi.issues.create(newRow), 'Yangi son qo‘shildi')) {
+    if (await run(() => adminApi.issues.create(newRow), 'Yangi son ochildi')) {
       setNewRow({ year: thisYear, number: '', isCurrent: true });
     }
   };
 
-  const onSave = async () => {
-    const { _id, year, number, isCurrent } = editing;
-    if (await run(() => adminApi.issues.update(_id, { year, number, isCurrent }), 'Son saqlandi')) setEditing(null);
-  };
+  const toggleOpen = (i) =>
+    run(
+      () => adminApi.issues.update(i._id, { isOpen: !i.isOpen }),
+      i.isOpen ? `${i.title} yopildi — endi unga maqola biriktirib bo‘lmaydi` : `${i.title} qayta ochildi`
+    );
 
-  const makeCurrent = (i) => run(() => adminApi.issues.update(i._id, { isCurrent: true }), `${i.title} joriy son qilindi`);
+  const makeCurrent = (i) => run(() => adminApi.issues.update(i._id, { isCurrent: true }), `${i.title} so‘nggi son qilindi`);
 
   const onDelete = (i) => {
     if (window.confirm(`${i.title}ni o‘chirasizmi?`)) run(() => adminApi.issues.remove(i._id), 'Son o‘chirildi');
@@ -68,10 +68,10 @@ export default function Issues() {
         />
         <label className="adm-check">
           <input type="checkbox" checked={newRow.isCurrent} onChange={(e) => setNewRow({ ...newRow, isCurrent: e.target.checked })} />
-          Joriy son
+          So‘nggi son qilish
         </label>
         <button type="submit" className="adm-btn adm-btn--primary">
-          + Qo‘shish
+          + Yangi son ochish
         </button>
       </form>
 
@@ -82,70 +82,52 @@ export default function Issues() {
             <thead>
               <tr>
                 <th>Son</th>
-                <th>Yil</th>
-                <th>Raqam</th>
                 <th>Maqolalar</th>
                 <th>Holat</th>
+                <th>PDF nashr</th>
+                <th>Bosh sahifa</th>
                 <th />
               </tr>
             </thead>
             <tbody>
-              {(list.data || []).map((i) =>
-                editing?._id === i._id ? (
-                  <tr key={i._id} className="is-editing">
-                    <td>{i.title}</td>
-                    <td>
-                      <input className="input adm-input--num" type="number" value={editing.year} onChange={(e) => setEditing({ ...editing, year: e.target.value })} />
-                    </td>
-                    <td>
-                      <input className="input adm-input--num" type="number" value={editing.number} onChange={(e) => setEditing({ ...editing, number: e.target.value })} />
-                    </td>
-                    <td>{i.articleCount}</td>
-                    <td>
-                      <label className="adm-check">
-                        <input type="checkbox" checked={editing.isCurrent} onChange={(e) => setEditing({ ...editing, isCurrent: e.target.checked })} />
-                        Joriy
-                      </label>
-                    </td>
-                    <td className="adm-actions">
-                      <button type="button" className="adm-link" onClick={onSave}>
-                        Saqlash
+              {(list.data || []).map((i) => (
+                <tr key={i._id}>
+                  <td className="adm-table__title">
+                    <Link to={`/admin/sonlar/${i._id}`}>{i.title}</Link>
+                  </td>
+                  <td>
+                    <Link to={`/admin/maqolalar?issue=${i._id}`} className="adm-link">
+                      {i.articleCount} ta
+                    </Link>
+                  </td>
+                  <td>
+                    <span className={`adm-badge ${i.isOpen ? 'adm-badge--accepted' : 'adm-badge--rejected'}`}>
+                      {i.isOpen ? 'Ochiq' : 'Yopiq'}
+                    </span>
+                  </td>
+                  <td>{i.pdf?.filename ? (i.pdf.generated ? '✓ yig‘ilgan' : '✓ yuklangan') : '—'}</td>
+                  <td>
+                    {i.isCurrent ? (
+                      <span className="adm-badge adm-badge--featured">So‘nggi son</span>
+                    ) : (
+                      <button type="button" className="adm-link adm-link--muted" onClick={() => makeCurrent(i)}>
+                        So‘nggi son qilish
                       </button>
-                      <button type="button" className="adm-link adm-link--muted" onClick={() => setEditing(null)}>
-                        Bekor qilish
-                      </button>
-                    </td>
-                  </tr>
-                ) : (
-                  <tr key={i._id}>
-                    <td className="adm-table__title">{i.title}</td>
-                    <td>{i.year}</td>
-                    <td>{i.number}</td>
-                    <td>
-                      <Link to={`/admin/maqolalar?issue=${i._id}`} className="adm-link">
-                        {i.articleCount}
-                      </Link>
-                    </td>
-                    <td>
-                      {i.isCurrent ? (
-                        <span className="adm-badge adm-badge--accepted">Joriy son</span>
-                      ) : (
-                        <button type="button" className="adm-link adm-link--muted" onClick={() => makeCurrent(i)}>
-                          Joriy qilish
-                        </button>
-                      )}
-                    </td>
-                    <td className="adm-actions">
-                      <button type="button" className="adm-link" onClick={() => setEditing({ ...i })}>
-                        Tahrirlash
-                      </button>
-                      <button type="button" className="adm-link adm-link--danger" onClick={() => onDelete(i)}>
-                        O‘chirish
-                      </button>
-                    </td>
-                  </tr>
-                )
-              )}
+                    )}
+                  </td>
+                  <td className="adm-actions">
+                    <button type="button" className="adm-link" onClick={() => toggleOpen(i)}>
+                      {i.isOpen ? 'Yopish' : 'Ochish'}
+                    </button>
+                    <Link to={`/admin/sonlar/${i._id}`} className="adm-link">
+                      Boshqarish
+                    </Link>
+                    <button type="button" className="adm-link adm-link--danger" onClick={() => onDelete(i)}>
+                      O‘chirish
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
