@@ -918,7 +918,95 @@ textarea {
 }
 
 .article__back {
+  display: flex;
+  width: fit-content;
   margin-top: 40px;
+}
+
+/* ---------- PDF ko'rish ---------- */
+.pdf {
+  margin-top: 40px;
+  background: var(--paper);
+  border: 1px solid #e4e8e5;
+  border-top: 4px solid var(--red);
+  box-shadow: 0 12px 32px rgba(15, 42, 53, 0.06);
+}
+
+.pdf__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 20px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.pdf__info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pdf__label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.pdf__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--navy-800);
+}
+
+.pdf__size {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 12.5px;
+  color: var(--muted-2);
+}
+
+.pdf__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pdf__btn {
+  height: 38px;
+  padding: 0 14px;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.pdf__frame {
+  display: block;
+  width: 100%;
+  height: min(1100px, 85vh);
+  min-height: 520px;
+  background: #e9edec;
+}
+
+.pdf__fallback {
+  height: 100%;
+  padding: 40px 24px;
+  background: #e9edec;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  color: var(--muted);
 }
 
 /* ---------- Footer ---------- */

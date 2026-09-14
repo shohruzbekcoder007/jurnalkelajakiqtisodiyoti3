@@ -3,7 +3,56 @@ import { api } from '../api.js';
 import { useFetch } from '../utils/useFetch.js';
 import ArticleMeta from '../components/ArticleMeta.jsx';
 import { Loading, ErrorMessage } from '../components/Status.jsx';
-import { ArrowLeft, ArrowRight } from '../components/Icons.jsx';
+import { ArrowLeft, Download, External } from '../components/Icons.jsx';
+
+const fileUrl = (filename) => `${(import.meta.env.VITE_API_URL || '').replace(/\/$/, '')}/uploads/${filename}`;
+
+function PdfViewer({ pdf, title }) {
+  const url = fileUrl(pdf.filename);
+  const name = pdf.originalName || `${title}.pdf`;
+  const size = pdf.size ? `${(pdf.size / 1024 / 1024).toFixed(2)} MB` : '';
+  // Ko'pchilik mobil brauzerlar PDF'ni sahifa ichida ko'rsata olmaydi (pdfViewerEnabled === false)
+  const canEmbed = typeof navigator === 'undefined' || navigator.pdfViewerEnabled !== false;
+
+  const fallback = (
+    <div className="pdf__fallback">
+      <p>Brauzeringiz PDF faylni sahifa ichida ko‘rsata olmaydi.</p>
+      <a href={url} target="_blank" rel="noreferrer" className="btn btn--primary pdf__btn">
+        <External size={14} /> PDF faylni ochish
+      </a>
+    </div>
+  );
+
+  return (
+    <section className="pdf">
+      <div className="pdf__bar">
+        <div className="pdf__info">
+          <span className="pdf__label">To‘liq maqola · PDF</span>
+          <span className="pdf__name" title={name}>
+            {name}
+            {size && <span className="pdf__size"> · {size}</span>}
+          </span>
+        </div>
+        <div className="pdf__actions">
+          <a href={url} target="_blank" rel="noreferrer" className="btn btn--outline pdf__btn">
+            <External size={14} /> Yangi oynada ochish
+          </a>
+          <a href={url} download={name} className="btn btn--primary pdf__btn">
+            <Download size={14} /> Yuklab olish
+          </a>
+        </div>
+      </div>
+
+      {canEmbed ? (
+        <object data={`${url}#view=FitH&navpanes=0`} type="application/pdf" className="pdf__frame" aria-label={title}>
+          {fallback}
+        </object>
+      ) : (
+        fallback
+      )}
+    </section>
+  );
+}
 
 export default function ArticleDetail() {
   const { slug } = useParams();
@@ -28,16 +77,9 @@ export default function ArticleDetail() {
               <p key={i}>{p}</p>
             ))}
           </div>
-          {data.pdf?.filename && (
-            <a
-              href={`${import.meta.env.VITE_API_URL || ''}/uploads/${data.pdf.filename}`}
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn--primary article__pdf"
-            >
-              To‘liq maqola (PDF) <ArrowRight />
-            </a>
-          )}
+
+          {data.pdf?.filename && <PdfViewer pdf={data.pdf} title={data.title} />}
+
           <Link to="/arxiv" className="link-arrow article__back">
             <ArrowLeft size={13} /> Arxivga qaytish
           </Link>

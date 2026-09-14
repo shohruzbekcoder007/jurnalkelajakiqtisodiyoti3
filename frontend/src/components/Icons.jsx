@@ -39,7 +39,19 @@ export const BookOpen = ({ size = 14 }) => (
   </svg>
 );
 
-export const Send = ({ size = 14 }) => (
+export const Download = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={2}>
+    <path d="M12 3v12M7 10l5 5 5-5M4 20h16" />
+  </svg>
+);
+
+export const External = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={2}>
+    <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
+  </svg>
+);
+
+export const Send =({ size = 14 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={2}>
     <path d="M22 2L11 13" />
     <path d="M22 2l-7 20-4-9-9-4z" />
