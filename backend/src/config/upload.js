@@ -1,9 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { fileURLToPath } from 'url';
 import multer from 'multer';
 
-export const UPLOAD_DIR = path.resolve(process.env.UPLOAD_DIR || 'uploads');
+// backend/ papkasi — yo'l jarayon qayerdan ishga tushirilganiga bog'liq bo'lmasligi uchun
+const BACKEND_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+export const UPLOAD_DIR = process.env.UPLOAD_DIR
+  ? path.resolve(process.env.UPLOAD_DIR)
+  : path.join(BACKEND_ROOT, 'uploads');
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 export const pdfUpload = multer({

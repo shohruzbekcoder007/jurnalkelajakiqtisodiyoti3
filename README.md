@@ -35,6 +35,69 @@ npm run dev               # http://localhost:5173
 Development'da Vite `/api` so'rovlarini avtomatik `localhost:5000` ga yo'naltiradi.
 Production'da backend boshqa domenda bo'lsa, `frontend/.env` ga `VITE_API_URL=https://api.sizning-domen.uz` yozing va `npm run build` qiling.
 
+## Serverga o'rnatish (PM2)
+
+Production'da bitta jarayon yetarli: Express ham API'ni, ham tayyor frontend fayllarini beradi.
+
+```bash
+# 1. Kod va paketlar
+git clone https://github.com/shohruzbekcoder007/jurnalkelajakiqtisodiyoti3.git
+cd jurnalkelajakiqtisodiyoti3
+npm ci --prefix backend --omit=dev
+npm ci --prefix frontend
+
+# 2. Sozlamalar
+cp backend/.env.example backend/.env
+nano backend/.env          # MONGO_URI, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
+
+# 3. Frontend'ni yig'ish (backend shu papkadan beradi)
+npm run build --prefix frontend
+
+# 4. Bazani to'ldirish (faqat birinchi marta)
+npm run seed --prefix backend
+
+# 5. PM2 bilan ishga tushirish
+npm install -g pm2
+pm2 start ecosystem.config.cjs
+pm2 save
+pm2 startup             # chiqqan buyruqni nusxalab bajaring — server qayta yuklansa ham ishlaydi
+```
+
+Sayt `http://<server>:5000` da ochiladi. Foydali buyruqlar: `pm2 status`, `pm2 logs kelajak-iqtisodiyoti`, `pm2 restart kelajak-iqtisodiyoti`.
+
+### Kodni yangilash
+
+```bash
+git pull
+npm ci --prefix backend --omit=dev
+npm ci --prefix frontend && npm run build --prefix frontend
+pm2 restart kelajak-iqtisodiyoti
+```
+
+### Nginx (domen va HTTPS uchun)
+
+```nginx
+server {
+    server_name jurnal.example.uz;
+    client_max_body_size 25M;   # PDF yuklash uchun
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+HTTPS: `sudo certbot --nginx -d jurnal.example.uz`.
+
+### Zaxira nusxa
+
+- Baza: `mongodump --db moliyaviy_texnologiyalar --out /backup/$(date +%F)`
+- Yuklangan PDF'lar: `backend/uploads/` papkasi
+
 ## Admin panel
 
 Manzil: **http://localhost:5173/admin**

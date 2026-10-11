@@ -1,4 +1,7 @@
 import 'dotenv/config';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -38,6 +41,20 @@ app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
 
 app.use('/api', (req, res) => res.status(404).json({ message: 'Topilmadi' }));
+
+// Production: tayyor frontend (npm run build) shu serverdan beriladi
+const CLIENT_DIR = path.resolve(
+  process.env.CLIENT_DIR ||
+    path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'frontend', 'dist')
+);
+if (fs.existsSync(path.join(CLIENT_DIR, 'index.html'))) {
+  app.use(express.static(CLIENT_DIR, { index: false, maxAge: '7d' }));
+  // SPA: barcha qolgan manzillar index.html ga yo'naltiriladi
+  app.get('*', (req, res) => res.sendFile(path.join(CLIENT_DIR, 'index.html')));
+  console.log(`Frontend: ${CLIENT_DIR}`);
+} else {
+  console.log('Frontend build topilmadi — faqat API ishlaydi (frontend/: npm run build)');
+}
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
