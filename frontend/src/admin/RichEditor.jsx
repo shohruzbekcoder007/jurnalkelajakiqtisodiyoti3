@@ -329,7 +329,7 @@ export default function RichEditor({ value, onChange }) {
 
       <div className="rte__status">
         <span className={status.type ? `rte__msg rte__msg--${status.type}` : 'rte__msg'}>
-          {status.text || (off ? 'HTML rejimi — qaytish uchun “HTML kod” tugmasini bosing' : 'Rasmni sudrab tashlash yoki nusxalab qo‘yish ham mumkin')}
+          {status.text || (off ? 'Bu yerda faqat muharrir qo‘llaydigan teglar saqlanadi. <style>, <script> va o‘z dizayningiz uchun yuqoridagi “HTML / CSS / JS kod” rejimini tanlang' : 'Rasmni sudrab tashlash yoki nusxalab qo‘yish ham mumkin')}
         </span>
         <span>
           {state.words} so‘z · {state.chars} belgi

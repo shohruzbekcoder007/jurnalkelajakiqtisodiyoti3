@@ -3,11 +3,17 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { adminApi } from '../adminApi.js';
 import { PageTitle, Field, Alert } from '../ui.jsx';
 import { publicPagePath } from '../../utils/pagePath.js';
+import CodePane from '../CodePane.jsx';
 
 // Muharrir og'ir — faqat shu sahifada yuklanadi
 const RichEditor = lazy(() => import('../RichEditor.jsx'));
 
-const empty = { title: '', eyebrow: '', slug: '', showUpdated: false, content: '' };
+const empty = { title: '', eyebrow: '', slug: '', showUpdated: false, content: '', format: 'rich', code: '' };
+
+const FORMATS = [
+  ['rich', 'Matn muharriri'],
+  ['code', 'HTML / CSS / JS kod'],
+];
 
 const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -30,12 +36,24 @@ export default function PageForm() {
       .get(id)
       .then((p) => {
         setSlug(p.slug);
-        setForm({ title: p.title, eyebrow: p.eyebrow || '', slug: p.slug, showUpdated: !!p.showUpdated, content: toHtml(p) });
+        setForm({
+          title: p.title,
+          eyebrow: p.eyebrow || '',
+          slug: p.slug,
+          showUpdated: !!p.showUpdated,
+          content: toHtml(p),
+          format: p.format || 'rich',
+          code: p.code || '',
+        });
       })
       .catch((err) => setFlash({ type: 'error', text: err.message }));
   }, [id, isNew]);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
+
+  // Kod rejimiga birinchi o'tishda muharrirdagi matn boshlang'ich kod bo'ladi
+  const setFormat = (format) =>
+    setForm((f) => ({ ...f, format, code: format === 'code' && !f.code.trim() ? f.content : f.code }));
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -92,9 +110,32 @@ export default function PageForm() {
         {/* <label> emas: muharrir ichidagi tugmalar label bosilishini o'g'irlamasligi uchun */}
         <div className="adm-field adm-field--wide">
           <span className="adm-field__label">Matn</span>
-          <Suspense fallback={<div className="rte rte--loading">Muharrir yuklanmoqda…</div>}>
-            <RichEditor value={form.content} onChange={(content) => setForm((f) => ({ ...f, content }))} />
-          </Suspense>
+          <div className="adm-tabs">
+            {FORMATS.map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                className={`adm-tab${form.format === value ? ' is-active' : ''}`}
+                onClick={() => setFormat(value)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          {form.format === 'code' ? (
+            <>
+              <CodePane value={form.code} onChange={(code) => setForm((f) => ({ ...f, code }))} />
+              <span className="adm-field__hint">
+                HTML, &lt;style&gt; va &lt;script&gt; o‘zgarishsiz ishlaydi. Sahifa saytda alohida oynada (iframe) ochiladi:
+                CSS saytning qolgan qismiga ta’sir qilmaydi, skript sayt va admin ma’lumotlariga kira olmaydi. Sayt
+                ranglari va shriftlari: var(--navy-800), var(--teal), var(--red), var(--font-serif), var(--font-display).
+              </span>
+            </>
+          ) : (
+            <Suspense fallback={<div className="rte rte--loading">Muharrir yuklanmoqda…</div>}>
+              <RichEditor value={form.content} onChange={(content) => setForm((f) => ({ ...f, content }))} />
+            </Suspense>
+          )}
         </div>
         <div className="adm-field--wide">
           <button type="submit" className="adm-btn adm-btn--primary" disabled={busy}>

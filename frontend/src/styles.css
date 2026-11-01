@@ -1,21 +1,74 @@
 :root {
-  --navy-900: #0f2a35;
-  --navy-800: #173744;
-  --navy-700: #163641;
-  --teal: #31718d;
-  --teal-soft: #dceaea;
-  --red: #c66d5d;
-  --paper: #fffefa;
-  --bg: #f5f5f3;
-  --line: #d6dfdc;
-  --text: #173744;
-  --muted: #4b5b67;
-  --muted-2: #7b8e94;
-
   --font-display: 'Instrument Serif', 'Times New Roman', serif;
   --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+}
+
+/* Kunduzgi rejim. .theme-light — admin panel sayt tungi rejimda bo'lsa ham kunduzgi qoladi */
+:root,
+.theme-light {
+  color-scheme: light;
+
+  /* To'q bloklar (topbar, footer, son kartochkasi) — ikkala rejimda bir xil */
+  --navy-900: #0f2a35;
+  --navy-800: #173744;
+  --navy-700: #163641;
+
+  --teal: #31718d;
+  --teal-soft: #dceaea;
+  --red: #c66d5d;
+  --paper: #fffefa;
+  --paper-raised: #ffffff;
+  --bg: #f5f5f3;
+  --surface-2: #e9edec;
+  --hover: #f3f6f4;
+  --line: #d6dfdc;
+  --line-soft: #e4e8e5;
+  --text: #173744;
+  --heading: #173744;
+  --prose: #2f434e;
+  --nav: #34455a;
+  --muted: #4b5b67;
+  --muted-2: #7b8e94;
+  --disabled: #b9c3c1;
+  /* To'q fonli tugma va kartochkalar */
+  --ink: #173744;
+  --ink-hover: #0f2a35;
+  --danger: #9c4435;
+  --danger-soft: #f6e4e0;
+}
+
+/* body'dan meros bo'ladigan matn rangi ham kunduzgi qiymatga qaytadi */
+.theme-light {
+  color: var(--text);
+}
+
+/* Tungi rejim (src/utils/theme.js). HtmlFrame.jsx dagi iframe tokenlari ham shunga mos */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --teal: #74b4cc;
+  --teal-soft: #173039;
+  --red: #e0907f;
+  --paper: #13222a;
+  --paper-raised: #1a2c35;
+  --bg: #0c171c;
+  --surface-2: #1a2b33;
+  --hover: #1b2e37;
+  --line: #2a3e47;
+  --line-soft: #1f323a;
+  --text: #d5e0e2;
+  --heading: #eef4f4;
+  --prose: #c4d1d4;
+  --nav: #bccbcf;
+  --muted: #9aadb2;
+  --muted-2: #7c9197;
+  --disabled: #43555c;
+  --ink: #24505f;
+  --ink-hover: #2c5f70;
+  --danger: #f0a596;
+  --danger-soft: #3b2420;
 }
 
 *,
@@ -112,7 +165,7 @@ textarea {
 /* ---------- Header ---------- */
 .header {
   background: var(--paper);
-  border-bottom: 1px solid #e4e8e5;
+  border-bottom: 1px solid var(--line-soft);
 }
 
 .header__inner {
@@ -137,11 +190,11 @@ textarea {
   flex: none;
   display: grid;
   place-items: center;
-  border: 1.5px solid var(--navy-800);
+  border: 1.5px solid var(--heading);
   font-family: var(--font-serif);
   font-weight: 700;
   font-size: 15px;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .brand__mark::after {
@@ -165,7 +218,7 @@ textarea {
   font-size: 21.5px;
   line-height: 1.2;
   letter-spacing: -0.01em;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .brand__sub {
@@ -173,7 +226,7 @@ textarea {
   font-size: 9.75px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #7d8797;
+  color: var(--muted-2);
 }
 
 .nav {
@@ -190,7 +243,7 @@ textarea {
   border-bottom: 2px solid transparent;
   font-size: 13px;
   font-weight: 500;
-  color: #34455a;
+  color: var(--nav);
   transition: color 0.15s;
 }
 
@@ -201,6 +254,25 @@ textarea {
 .nav__link.is-active {
   color: var(--teal);
   border-bottom-color: var(--red);
+}
+
+/* Kun/tun tugmasi — menyuning oxirida */
+.theme-toggle {
+  align-self: flex-start;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--nav);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.theme-toggle:hover {
+  color: var(--teal);
 }
 
 /* "Jurnal haqida" dropdown */
@@ -219,7 +291,7 @@ textarea {
   padding: 0;
   border: 0;
   background: none;
-  color: #34455a;
+  color: var(--nav);
   cursor: pointer;
   transition: color 0.15s;
 }
@@ -246,7 +318,7 @@ textarea {
   min-width: 240px;
   padding: 8px 0;
   background: var(--paper);
-  border: 1px solid #e4e8e5;
+  border: 1px solid var(--line-soft);
   border-top: 2px solid var(--red);
   box-shadow: 0 14px 30px rgba(15, 42, 53, 0.12);
 }
@@ -266,13 +338,13 @@ textarea {
   padding: 9px 16px;
   font-size: 13px;
   font-weight: 500;
-  color: #34455a;
+  color: var(--nav);
   transition: color 0.15s, background-color 0.15s;
 }
 
 .nav__menu-link:hover {
   color: var(--teal);
-  background: #f3f6f4;
+  background: var(--hover);
 }
 
 .nav__menu-link.is-active {
@@ -293,7 +365,7 @@ textarea {
 .display {
   font-family: var(--font-display);
   font-weight: 400;
-  color: var(--navy-800);
+  color: var(--heading);
   letter-spacing: -0.015em;
 }
 
@@ -301,7 +373,7 @@ textarea {
   font-family: var(--font-serif);
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--navy-800);
+  color: var(--heading);
   letter-spacing: 0.005em;
 }
 
@@ -355,7 +427,7 @@ textarea {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border: 1px solid var(--navy-800);
+  border: 1px solid var(--ink);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -363,12 +435,12 @@ textarea {
 }
 
 .btn--primary {
-  background: var(--navy-800);
+  background: var(--ink);
   color: #fff;
 }
 
 .btn--primary:hover {
-  background: var(--navy-900);
+  background: var(--ink-hover);
 }
 
 .btn--primary:disabled {
@@ -378,11 +450,12 @@ textarea {
 
 .btn--outline {
   background: transparent;
-  color: var(--navy-800);
+  border-color: var(--heading);
+  color: var(--heading);
 }
 
 .btn--outline:hover {
-  background: var(--navy-800);
+  background: var(--ink);
   color: #fff;
 }
 
@@ -400,7 +473,7 @@ textarea {
 }
 
 .input::placeholder {
-  color: #6b7a7f;
+  color: var(--muted-2);
 }
 
 .input:focus {
@@ -416,7 +489,7 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .side-label__line {
@@ -435,7 +508,7 @@ textarea {
   font-family: var(--font-serif);
   font-weight: 600;
   font-size: 17px;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .info-box__text {
@@ -462,7 +535,7 @@ textarea {
 .page-head {
   padding: 80px 0 28px;
   margin-bottom: 32px;
-  border-bottom: 1px solid var(--navy-800);
+  border-bottom: 1px solid var(--heading);
 }
 
 .page-head__title {
@@ -601,7 +674,7 @@ textarea {
   gap: 16px;
   padding-bottom: 10px;
   margin-bottom: 20px;
-  border-bottom: 1px solid var(--navy-800);
+  border-bottom: 1px solid var(--heading);
 }
 
 .section-head__title {
@@ -610,7 +683,7 @@ textarea {
   font-size: 26px;
   line-height: 1.2;
   letter-spacing: -0.01em;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .section-head__note {
@@ -642,7 +715,7 @@ textarea {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: var(--navy-800);
+  background: var(--ink);
   border-top: 4px solid var(--red);
   color: #fff;
 }
@@ -692,7 +765,7 @@ textarea {
   padding: 18px 21px 22px;
   display: flex;
   flex-direction: column;
-  background: #dbe9e9;
+  background: var(--teal-soft);
   border-top: 3px solid var(--teal);
 }
 
@@ -738,7 +811,7 @@ textarea {
   height: 67px;
   display: grid;
   place-items: center;
-  background: #e9edec;
+  background: var(--surface-2);
   font-family: var(--font-serif);
   font-size: 22px;
   color: var(--teal);
@@ -755,7 +828,7 @@ textarea {
   justify-content: space-between;
   border-bottom: 1px solid var(--line);
   font-size: 14px;
-  color: #4a5568;
+  color: var(--muted);
   transition: color 0.15s;
 }
 
@@ -835,23 +908,23 @@ textarea {
   background: var(--paper);
   font-family: var(--font-mono);
   font-size: 11px;
-  color: var(--navy-800);
+  color: var(--heading);
   cursor: pointer;
 }
 
 .pagination__btn:hover:not(:disabled) {
-  border-color: var(--navy-800);
+  border-color: var(--heading);
 }
 
 .pagination__btn.is-active {
-  background: var(--navy-800);
-  border-color: var(--navy-800);
+  background: var(--ink);
+  border-color: var(--ink);
   color: #f0b35a;
 }
 
 .pagination__btn:disabled {
   background: transparent;
-  color: #b9c3c1;
+  color: var(--disabled);
   cursor: default;
 }
 
@@ -884,7 +957,7 @@ textarea {
 }
 
 .rubric-cell:hover {
-  background: #fff;
+  background: var(--paper-raised);
 }
 
 .rubric-cell__num {
@@ -899,7 +972,7 @@ textarea {
   font-weight: 600;
   font-size: 20px;
   line-height: 1.3;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .rubric-cell__count {
@@ -920,7 +993,7 @@ textarea {
   font-family: var(--font-serif);
   font-size: 17.75px;
   line-height: 1.83;
-  color: #2f434e;
+  color: var(--prose);
 }
 
 .prose > * + * {
@@ -934,7 +1007,7 @@ textarea {
   font-family: var(--font-serif);
   font-weight: 600;
   line-height: 1.3;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .prose h2 {
@@ -961,7 +1034,7 @@ textarea {
   font-family: var(--font-serif);
   font-size: 17.75px;
   line-height: 1.83;
-  color: #2f434e;
+  color: var(--prose);
 }
 
 .prose ul {
@@ -988,7 +1061,7 @@ textarea {
 
 .prose blockquote p {
   font-style: italic;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .prose a {
@@ -999,7 +1072,7 @@ textarea {
 }
 
 .prose a:hover {
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .prose img {
@@ -1019,6 +1092,11 @@ textarea {
   color: inherit;
 }
 
+/* Marker ranglari och — tungi rejimda ham ustidagi matn to'q bo'ladi */
+:root[data-theme='dark'] .prose mark {
+  color: #13222a;
+}
+
 .prose table {
   width: 100%;
   border-collapse: collapse;
@@ -1033,7 +1111,7 @@ textarea {
 }
 
 .prose th {
-  background: #edf2f0;
+  background: var(--surface-2);
 }
 
 .prose th p,
@@ -1045,7 +1123,7 @@ textarea {
 
 .prose th p {
   font-weight: 700;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .prose th > * + *,
@@ -1059,6 +1137,14 @@ textarea {
   height: auto;
   aspect-ratio: 16 / 9;
   border: 0;
+}
+
+/* Admin yozgan HTML/CSS/JS sahifa — balandligi ichidagi kontentga qarab o'zgaradi */
+.html-frame {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
 }
 
 /* Keng jadval telefonda sahifani emas, o'zini aylantiradi */
@@ -1080,7 +1166,7 @@ textarea {
 .form-card {
   padding: 26px 25px;
   background: var(--paper);
-  border: 1px solid #e4e8e5;
+  border: 1px solid var(--line-soft);
   box-shadow: 0 12px 32px rgba(15, 42, 53, 0.06);
 }
 
@@ -1094,7 +1180,7 @@ textarea {
   margin-bottom: 8px;
   font-size: 12px;
   font-weight: 700;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .field__req {
@@ -1109,7 +1195,7 @@ textarea {
 }
 
 .form-card .input {
-  border-color: #cfdcd8;
+  border-color: var(--line);
 }
 
 .textarea {
@@ -1131,12 +1217,12 @@ textarea {
 
 .form-status--success {
   background: var(--teal-soft);
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .form-status--error {
-  background: #f6e4e0;
-  color: #9c4435;
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .submit-aside {
@@ -1147,7 +1233,7 @@ textarea {
   font-family: var(--font-serif);
   font-weight: 600;
   font-size: 22px;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .submit-aside__text {
@@ -1188,7 +1274,7 @@ textarea {
   font-family: var(--font-serif);
   font-weight: 600;
   font-size: 24px;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .issues-grid {
@@ -1281,7 +1367,7 @@ textarea {
 .pdf {
   margin-top: 40px;
   background: var(--paper);
-  border: 1px solid #e4e8e5;
+  border: 1px solid var(--line-soft);
   border-top: 4px solid var(--red);
   box-shadow: 0 12px 32px rgba(15, 42, 53, 0.06);
 }
@@ -1319,7 +1405,7 @@ textarea {
   font-family: var(--font-serif);
   font-weight: 600;
   font-size: 15px;
-  color: var(--navy-800);
+  color: var(--heading);
 }
 
 .pdf__size {
@@ -1347,13 +1433,13 @@ textarea {
   width: 100%;
   height: min(1100px, 85vh);
   min-height: 520px;
-  background: #e9edec;
+  background: var(--surface-2);
 }
 
 .pdf__fallback {
   height: 100%;
   padding: 40px 24px;
-  background: #e9edec;
+  background: var(--surface-2);
   display: flex;
   flex-direction: column;
   align-items: center;

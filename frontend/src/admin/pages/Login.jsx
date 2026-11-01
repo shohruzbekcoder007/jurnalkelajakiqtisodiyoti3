@@ -28,7 +28,7 @@ export default function Login() {
   };
 
   return (
-    <div className="adm-login">
+    <div className="adm-login theme-light">
       <form className="adm-login__card" onSubmit={onSubmit}>
         <div className="brand">
           <span className="brand__mark">KI</span>

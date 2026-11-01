@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kelajak iqtisodiyoti va raqamli transformatsiyalar — ilmiy elektron jurnali</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      // Kun/tun rejimi birinchi chizishdan oldin qo'yiladi (kalit src/utils/theme.js bilan bir xil)
+      (function () {
+        var t = null;
+        try {
+          t = localStorage.getItem('ki-theme');
+        } catch (e) {}
+        if (t !== 'dark' && t !== 'light') {
+          t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

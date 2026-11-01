@@ -18,7 +18,7 @@ import './admin.css';
 function Protected({ children }) {
   const { admin, ready } = useAuth();
   const location = useLocation();
-  if (!ready) return <div className="adm-splash">Yuklanmoqda…</div>;
+  if (!ready) return <div className="adm-splash theme-light">Yuklanmoqda…</div>;
   if (!admin) return <Navigate to="/admin/kirish" replace state={{ from: location.pathname }} />;
   return children;
 }

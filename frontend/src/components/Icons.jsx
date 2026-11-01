@@ -25,6 +25,19 @@ export const ChevronRight = ({ size = 12 }) => (
   </svg>
 );
 
+export const Sun = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+  </svg>
+);
+
+export const Moon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base}>
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+  </svg>
+);
+
 export const ChevronDown = ({ size = 12 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={2}>
     <path d="M6 9l6 6 6-6" />

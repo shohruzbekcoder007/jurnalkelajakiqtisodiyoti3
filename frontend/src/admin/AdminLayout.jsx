@@ -23,7 +23,7 @@ export default function AdminLayout() {
   }, [pathname]);
 
   return (
-    <div className="adm">
+    <div className="adm theme-light">
       <aside className={`adm-side${open ? ' is-open' : ''}`}>
         <Link to="/admin" className="adm-brand">
           <span className="brand__mark adm-brand__mark">KI</span>

@@ -3,7 +3,8 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { api } from '../api.js';
 import { useFetch } from '../utils/useFetch.js';
 import { publicPagePath } from '../utils/pagePath.js';
-import { ChevronDown } from './Icons.jsx';
+import { useTheme, toggleTheme } from '../utils/theme.js';
+import { ChevronDown, Moon, Sun } from './Icons.jsx';
 
 const ABOUT = '/jurnal-haqida';
 
@@ -46,9 +47,20 @@ export default function Header() {
               </NavLink>
             )
           )}
+          <ThemeToggle />
         </nav>
       </div>
     </header>
+  );
+}
+
+function ThemeToggle() {
+  const dark = useTheme() === 'dark';
+  const label = dark ? 'Kunduzgi rejim' : 'Tungi rejim';
+  return (
+    <button type="button" className="theme-toggle" title={label} aria-label={label} onClick={toggleTheme}>
+      {dark ? <Sun size={17} /> : <Moon size={16} />}
+    </button>
   );
 }
 
