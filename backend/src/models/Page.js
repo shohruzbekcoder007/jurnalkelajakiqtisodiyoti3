@@ -6,7 +6,9 @@ const pageSchema = new mongoose.Schema(
     eyebrow: { type: String, default: '' },
     title: { type: String, required: true },
     showUpdated: { type: Boolean, default: false },
+    // Eski format: oddiy paragraflar. Muharrirda saqlangan sahifalar `content` (HTML) ni ishlatadi
     body: { type: [String], default: [] },
+    content: { type: String, default: '' },
   },
   { timestamps: true }
 );

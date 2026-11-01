@@ -8,7 +8,8 @@ import Submission from '../models/Submission.js';
 import { requireAdmin } from '../middleware/auth.js';
 import { asyncHandler, issueTitle } from '../utils/asyncHandler.js';
 import { uniqueSlug } from '../utils/slugify.js';
-import { pdfUpload, removeUpload, UPLOAD_DIR } from '../config/upload.js';
+import { pdfUpload, removeUpload, UPLOAD_DIR, pageFileUpload, originalName, IMAGE_EXTS } from '../config/upload.js';
+import { cleanPageHtml } from '../utils/sanitizeHtml.js';
 import { buildIssuePdf } from '../utils/buildIssuePdf.js';
 import fs from 'fs/promises';
 import path from 'path';
@@ -447,6 +448,11 @@ function pagePayload(body) {
   if (body.eyebrow !== undefined) data.eyebrow = String(body.eyebrow).trim();
   if (body.showUpdated !== undefined) data.showUpdated = !!body.showUpdated;
   if (body.body !== undefined) data.body = toParagraphs(body.body);
+  // Muharrirdan kelgan HTML eski paragraflar o'rnini egallaydi
+  if (body.content !== undefined) {
+    data.content = cleanPageHtml(body.content);
+    data.body = [];
+  }
   return data;
 }
 
@@ -495,6 +501,21 @@ router.delete(
     const page = await Page.findByIdAndDelete(req.params.id);
     if (!page) return notFound(res, 'Sahifa');
     res.json({ message: 'Sahifa o‘chirildi' });
+  })
+);
+
+// Sahifa muharriri: rasm yoki hujjat yuklash → /uploads/pages/<fayl>
+router.post(
+  '/uploads',
+  pageFileUpload.single('file'),
+  asyncHandler(async (req, res) => {
+    if (!req.file) return res.status(400).json({ message: 'Fayl tanlanmagan' });
+    res.status(201).json({
+      path: `pages/${req.file.filename}`,
+      name: originalName(req.file),
+      size: req.file.size,
+      isImage: IMAGE_EXTS.includes(path.extname(req.file.filename)),
+    });
   })
 );
 
