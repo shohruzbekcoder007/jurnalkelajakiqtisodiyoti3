@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { adminApi } from '../adminApi.js';
 import { PageTitle, Field, Alert } from '../ui.jsx';
+import { publicPagePath } from '../../utils/pagePath.js';
 
-// Saytdagi doimiy manzillarga ega sahifalar; qolganlari /sahifa/:slug da ochiladi
-const FIXED = ['jurnal-haqida', 'tahrir-kengashi', 'jurnal-manzili', 'chop-etish-tartibi', 'axborot-xati'];
-export const publicPagePath = (slug) => (FIXED.includes(slug) ? `/${slug}` : `/sahifa/${slug}`);
+// Muharrir og'ir — faqat shu sahifada yuklanadi
+const RichEditor = lazy(() => import('../RichEditor.jsx'));
 
-const empty = { title: '', eyebrow: '', slug: '', showUpdated: false, body: '' };
+const empty = { title: '', eyebrow: '', slug: '', showUpdated: false, content: '' };
+
+const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// Eski sahifalar: paragraflar ro'yxati → HTML
+const toHtml = (page) => page.content || (page.body || []).map((p) => `<p>${escapeHtml(p)}</p>`).join('');
 
 export default function PageForm() {
   const { id } = useParams();
@@ -25,7 +30,7 @@ export default function PageForm() {
       .get(id)
       .then((p) => {
         setSlug(p.slug);
-        setForm({ title: p.title, eyebrow: p.eyebrow || '', slug: p.slug, showUpdated: !!p.showUpdated, body: (p.body || []).join('\n\n') });
+        setForm({ title: p.title, eyebrow: p.eyebrow || '', slug: p.slug, showUpdated: !!p.showUpdated, content: toHtml(p) });
       })
       .catch((err) => setFlash({ type: 'error', text: err.message }));
   }, [id, isNew]);
@@ -84,9 +89,13 @@ export default function PageForm() {
           <input type="checkbox" checked={form.showUpdated} onChange={set('showUpdated')} />
           “Yangilangan: sana” yozuvini ko‘rsatish
         </label>
-        <Field label="Matn" hint="Paragraflarni bo‘sh qator bilan ajrating" wide>
-          <textarea className="input adm-textarea adm-textarea--lg" value={form.body} onChange={set('body')} />
-        </Field>
+        {/* <label> emas: muharrir ichidagi tugmalar label bosilishini o'g'irlamasligi uchun */}
+        <div className="adm-field adm-field--wide">
+          <span className="adm-field__label">Matn</span>
+          <Suspense fallback={<div className="rte rte--loading">Muharrir yuklanmoqda…</div>}>
+            <RichEditor value={form.content} onChange={(content) => setForm((f) => ({ ...f, content }))} />
+          </Suspense>
+        </div>
         <div className="adm-field--wide">
           <button type="submit" className="adm-btn adm-btn--primary" disabled={busy}>
             {busy ? 'Saqlanmoqda…' : isNew ? 'Sahifani yaratish' : 'Saqlash'}

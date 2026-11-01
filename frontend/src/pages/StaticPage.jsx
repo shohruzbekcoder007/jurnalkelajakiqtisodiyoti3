@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { api } from '../api.js';
 import { useFetch, formatDate } from '../utils/useFetch.js';
 import PageHeader from '../components/PageHeader.jsx';
@@ -5,6 +6,16 @@ import { Loading, ErrorMessage } from '../components/Status.jsx';
 
 export default function StaticPage({ slug }) {
   const { data, loading, error } = useFetch(() => api.page(slug), [slug]);
+  const navigate = useNavigate();
+
+  // Matn ichidagi sayt havolalari sahifani qayta yuklamasdan ochiladi
+  const onContentClick = (e) => {
+    const a = e.target.closest('a');
+    if (!a || a.target || a.origin !== window.location.origin || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    if (a.pathname.startsWith('/uploads/') || a.pathname.startsWith('/api/')) return;
+    e.preventDefault();
+    navigate(a.pathname + a.search + a.hash);
+  };
 
   return (
     <div className="container container--narrow">
@@ -17,11 +28,16 @@ export default function StaticPage({ slug }) {
           <PageHeader eyebrow={data.eyebrow} title={data.title}>
             {data.showUpdated ? `Yangilangan: ${formatDate(data.updatedAt)}` : null}
           </PageHeader>
-          <div className="prose">
-            {data.body.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
+          {data.content ? (
+            // HTML server tomonida saqlashda tozalangan (backend/src/utils/sanitizeHtml.js)
+            <div className="prose" onClick={onContentClick} dangerouslySetInnerHTML={{ __html: data.content }} />
+          ) : (
+            <div className="prose">
+              {data.body.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+          )}
         </>
       )}
     </div>

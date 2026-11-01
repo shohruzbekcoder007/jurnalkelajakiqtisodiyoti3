@@ -89,6 +89,11 @@ export const adminApi = {
     generatePdf: (id) => request(`/admin/issues/${id}/pdf/generate`, { method: 'POST' }),
   },
   pages: crud('pages'),
+  uploadFile: (file) => {
+    const form = new FormData();
+    form.append('file', file);
+    return request('/admin/uploads', { method: 'POST', form });
+  },
   submissions: {
     list: (params) => request(`/admin/submissions?${qs(params)}`),
     setStatus: (id, status) => request(`/admin/submissions/${id}`, { method: 'PATCH', body: { status } }),

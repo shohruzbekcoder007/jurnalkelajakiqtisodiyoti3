@@ -26,6 +26,7 @@ export const api = {
   currentIssue: () => request('/issues/current'),
   issues: () => request('/issues'),
   issue: (year, number) => request(`/issues/${encodeURIComponent(year)}/${encodeURIComponent(number)}`),
+  pages: () => request('/pages'),
   page: (slug) => request(`/pages/${encodeURIComponent(slug)}`),
   submit: (body) => request('/submissions', { method: 'POST', body: JSON.stringify(body) }),
 };

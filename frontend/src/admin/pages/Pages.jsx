@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminApi } from '../adminApi.js';
 import { PageTitle, Alert, useLoader, formatDateTime } from '../ui.jsx';
-import { publicPagePath } from './PageForm.jsx';
+import { publicPagePath } from '../../utils/pagePath.js';
 
 export default function Pages() {
   const list = useLoader(() => adminApi.pages.list());

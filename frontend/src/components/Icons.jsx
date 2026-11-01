@@ -25,6 +25,12 @@ export const ChevronRight = ({ size = 12 }) => (
   </svg>
 );
 
+export const ChevronDown = ({ size = 12 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={2}>
+    <path d="M6 9l6 6 6-6" />
+  </svg>
+);
+
 export const Search = ({ size = 15 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" {...base} strokeWidth={2}>
     <circle cx="11" cy="11" r="7" />
