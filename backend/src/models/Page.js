@@ -9,6 +9,9 @@ const pageSchema = new mongoose.Schema(
     // Eski format: oddiy paragraflar. Muharrirda saqlangan sahifalar `content` (HTML) ni ishlatadi
     body: { type: [String], default: [] },
     content: { type: String, default: '' },
+    // 'code' — admin yozgan erkin HTML/CSS/JS; saytda sandbox iframe ichida ishlaydi, shuning uchun tozalanmaydi
+    format: { type: String, enum: ['rich', 'code'], default: 'rich' },
+    code: { type: String, default: '' },
   },
   { timestamps: true }
 );

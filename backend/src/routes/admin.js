@@ -453,6 +453,8 @@ function pagePayload(body) {
     data.content = cleanPageHtml(body.content);
     data.body = [];
   }
+  if (body.format !== undefined) data.format = body.format === 'code' ? 'code' : 'rich';
+  if (body.code !== undefined) data.code = String(body.code);
   return data;
 }
 
